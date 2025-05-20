@@ -68,10 +68,10 @@ const String sdkEventKey = 'chat_uikit';
 
 abstract mixin class ChatUIKitObserverBase {}
 
+final List<ChatUIKitObserverBase> observers = [];
+
 abstract class ChatUIKitServiceBase {
   @protected
-  final List<ChatUIKitObserverBase> observers = [];
-
   @protected
   @mustCallSuper
   void addListeners() {}
@@ -134,7 +134,6 @@ class ChatSDKService extends ChatUIKitServiceBase
         GroupWrapper,
         RoomWrapper,
         ContactWrapper,
-        // ConnectWrapper,
         MultiWrapper,
         NotificationWrapper,
         ThreadWrapper,
@@ -200,6 +199,7 @@ class ChatSDKService extends ChatUIKitServiceBase
   Future<void> logout() {
     return checkResult(ChatSDKEvent.logout, () async {
       await Client.getInstance.logout();
+      observers.clear();
       Client.getInstance.removeConnectionEventHandler('chat_sdk_wrapper');
     });
   }
